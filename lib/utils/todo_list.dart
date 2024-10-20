@@ -6,12 +6,16 @@ class TodoList extends StatelessWidget {
     super.key,
     required this.taskName,
     required this.taskCompleted,
+    required this.category,
+    required this.dueDate,
     required this.onChanged,
     required this.deleteFunction,
   });
 
   final String taskName;
   final bool taskCompleted;
+  final String category;
+  final DateTime dueDate;
   final Function(bool?)? onChanged;
   final Function(BuildContext)? deleteFunction;
 
@@ -26,7 +30,7 @@ class TodoList extends StatelessWidget {
       ),
       child: Slidable(
         endActionPane: ActionPane(
-          motion: StretchMotion(),
+          motion: const StretchMotion(),
           children: [
             SlidableAction(
               onPressed: deleteFunction,
@@ -41,28 +45,45 @@ class TodoList extends StatelessWidget {
             color: const Color.fromARGB(255, 34, 56, 255),
             borderRadius: BorderRadius.circular(15),
           ),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Checkbox(
-                value: taskCompleted,
-                onChanged: onChanged,
-                checkColor: Colors.black,
-                activeColor: Colors.white,
-                side: const BorderSide(
-                  color: Colors.white,
-                ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: taskCompleted,
+                    onChanged: onChanged,
+                    checkColor: Colors.black,
+                    activeColor: Colors.white,
+                    side: const BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      taskName,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        decoration: taskCompleted
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                        decorationColor: Colors.white,
+                        decorationThickness: 2,
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 5),
               Text(
-                taskName,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  decoration: taskCompleted
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                  decorationColor: Colors.white,
-                  decorationThickness: 2,
-                ),
+                'Categoría: $category',
+                style: const TextStyle(color: Colors.white),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                'Fecha de vencimiento: ${dueDate.day}/${dueDate.month}/${dueDate.year}',
+                style: const TextStyle(color: Colors.white),
               ),
             ],
           ),

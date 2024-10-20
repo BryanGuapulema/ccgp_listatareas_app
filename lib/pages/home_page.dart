@@ -10,11 +10,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _controller = TextEditingController();
+  List<String> categories = ['Trabajo', 'Personal', 'Estudio', 'Otro'];
+  String selectedCategory = 'Trabajo';
+  DateTime selectedDate = DateTime.now();
+
   List toDoList = [
-    ['Steven Criollo', true],
-    ['Francis Chafla', true],
-    ['Bryan Guapulema', false],
-    ['Anthony Pombosa', false],
+    ['Steven Criollo', true, 'Trabajo', DateTime.now().add(Duration(days: 1))],
+    ['Francis Chafla', true, 'Personal', DateTime.now().add(Duration(days: 2))],
+    ['Bryan Guapulema', false, 'Estudio', DateTime.now().add(Duration(days: 3))],
+    ['Anthony Pombosa', false, 'Otro', DateTime.now().add(Duration(days: 4))],
   ];
 
   void checkBoxChanged(int index) {
@@ -25,9 +29,23 @@ class _HomePageState extends State<HomePage> {
 
   void saveNewTask() {
     setState(() {
-      toDoList.add([_controller.text, false]);
+      toDoList.add([_controller.text, false, selectedCategory, selectedDate]);
       _controller.clear();
     });
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 
   void deleteTask(int index) {
