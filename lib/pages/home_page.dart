@@ -65,54 +65,94 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: const Color.fromARGB(255, 13, 10, 179),
         foregroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        itemCount: toDoList.length,
-        itemBuilder: (BuildContext context, index) {
-          return TodoList(
-            taskName: toDoList[index][0],
-            taskCompleted: toDoList[index][1],
-            onChanged: (value) => checkBoxChanged(index),
-            deleteFunction: (contex) => deleteTask(index),
-          );
-        },
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    hintText: 'Add a new todo items',
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 157, 174, 219),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 58, 77, 183),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: toDoList.length,
+              itemBuilder: (BuildContext context, index) {
+                return TodoList(
+                  taskName: toDoList[index][0],
+                  taskCompleted: toDoList[index][1],
+                  category: toDoList[index][2],
+                  dueDate: toDoList[index][3],
+                  onChanged: (value) => checkBoxChanged(index),
+                  deleteFunction: (context) => deleteTask(index),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: 'Nueva tarea',
+                      filled: true,
+                      fillColor: const Color.fromARGB(255, 157, 174, 219),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 58, 77, 183),
+                        ),
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 46, 15, 184),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 46, 15, 184),
+                        ),
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      borderRadius: BorderRadius.circular(15),
                     ),
                   ),
                 ),
-              ),
+                DropdownButton<String>(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    value: selectedCategory,     
+                    dropdownColor: const Color.fromARGB(255, 157, 174, 219),               
+                    items: categories.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 3, 6, 216),
+                          ),
+                          ),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedCategory = newValue!;
+                      });
+                    },
+                  ),
+                IconButton(
+                  onPressed: () => _selectDate(context),
+                  icon: const Icon(Icons.calendar_today),
+                  color: Colors.white,
+                  iconSize: 30,
+                  padding: const EdgeInsets.only(left: 10),
+                ),
+              ],
             ),
-            FloatingActionButton(
-              onPressed: saveNewTask,
-              child: const Icon(Icons.add),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Row(
+              children: [                                          
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: saveNewTask,
+                    child: Text('Añadir'),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
