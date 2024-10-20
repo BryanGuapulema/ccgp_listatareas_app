@@ -27,10 +27,29 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /*
   void saveNewTask() {
     setState(() {
       toDoList.add([_controller.text, false, selectedCategory, selectedDate]);
       _controller.clear();
+    });
+  }
+  */
+
+  void saveNewTask() {
+    setState(() {
+      // Agregar la nueva tarea a la lista
+      toDoList.add([_controller.text, false, selectedCategory, selectedDate]);
+      
+      // Limpiar el campo de texto
+      _controller.clear();
+
+      // Ordenar la lista de tareas por fecha (suponiendo que el cuarto elemento es la fecha)
+      toDoList.sort((a, b) {
+        DateTime dateA = a[3]; // La fecha de la tarea A
+        DateTime dateB = b[3]; // La fecha de la tarea B
+        return dateA.compareTo(dateB); // Comparar las fechas
+      });
     });
   }
 
